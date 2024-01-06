@@ -14,7 +14,7 @@ int main(){
     posGraphUltimate position;
     position.joueur = 'o'; // Il faut initialisé le joueur qui commence (à automatiser)
     for(int j=0;j<9;j++){
-        position.morpion[j] = newPosition("9",'o');
+        position.morpion[j] = newPosition("xo3o3",'o');
         showTable(position.morpion[j]);
     }
     position.morpion[9] = newPosition("9",'o');
