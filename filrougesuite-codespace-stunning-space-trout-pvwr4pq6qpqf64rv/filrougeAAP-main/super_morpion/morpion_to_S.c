@@ -51,9 +51,9 @@ posGraphUltimate TourUltimateBot(posGraphUltimate position, char* pointeur_last_
         }
     }
     maximum = -INFINI;
-    int coup_a_jouer[2];
+    int coup_a_jouer[3];
     char joueur_temp = position.joueur;
-    evaluation(position, grille, 5, 1, coup_a_jouer,1);
+    evaluation(position, grille, 4, 1, coup_a_jouer,1);
     position.joueur = joueur_temp;
     printf("\nCoup joué par le bot: %d\n", coup_a_jouer[0]);
     strcpy(position.morpion[grille - 1].pos, TourAuto(position.morpion[grille - 1].pos, intToCoup(coup_a_jouer[0] + 1), position.joueur));
@@ -97,11 +97,11 @@ int evaluation(posGraphUltimate position, int coup_precedent, int horizon, int i
         printf("Meilleur coup fils : %d  | evaluation : %d\n", coup_a_jouer[iterator - 1], aux);
         return aux;
     }
-    //if(coup_precedent==9) return -INFINI;
     else {
         int m = -INFINI;
         int i_max = -INFINI;
         char grille_saved_temp[9];
+        
         strcpy(grille_saved_temp, position.morpion[coup_precedent - 1].pos);
         showTable(position.morpion[coup_precedent - 1]);
         CoupOpti(position.morpion[coup_precedent - 1], -1, 0, Joueurautrait, coupSave, evaluationSave,0.9);
