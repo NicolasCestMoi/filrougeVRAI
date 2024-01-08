@@ -16,6 +16,6 @@ typedef struct{
 /******Prototypages******/
 
 int CoupOpti(posGraph position, int parentID, int moveID, int isJoueurAuTrait, int coupopti[],int evaluation[],int ponderation);
-
+posGraphUltimate fenToPosGraphUltimate(char* fen);
 
 #endif

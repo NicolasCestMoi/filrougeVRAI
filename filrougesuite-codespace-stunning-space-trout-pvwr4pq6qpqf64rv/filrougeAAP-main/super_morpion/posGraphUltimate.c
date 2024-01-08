@@ -11,8 +11,46 @@
 
 #define INF 1000
 
-posGraphUltimate fenToPosGraphUltimate(char* fen){
+extern int DEBUG;
 
+posGraphUltimate fenToPosGraphUltimate(char* fen){
+    posGraphUltimate position;
+    int decalage = 0;
+    char* temp_BigMorpion = malloc(10*sizeof(char));
+    strcpy(temp_BigMorpion, ".........");
+    for(int i=0; i<9;i++){
+        if(DEBUG == 1) printf("Caractère de rang %d :   %c\n", i,fen[i+decalage] );
+        if(fen[i+decalage] == 'O'){         //On traite les cas où les morpions sont déjà gagnants
+            strcpy(position.morpion[i].pos,"ooooooooo");
+            temp_BigMorpion[i] = 'o';
+        }
+        else if(fen[i+decalage] == 'X'){
+            strcpy(position.morpion[i].pos,"xxxxxxxxx");
+            temp_BigMorpion[i] = 'x';
+        }
+        else{
+            int somme_carac = 0;        //sinon, on stocke l'état
+            int comptage = 0;
+            
+            for(int j = 0; j<9;j++){
+                if(DEBUG == 1) printf("%d   %c\n", j+decalage+i, fen[j+decalage+i]);
+                if(fen[j+decalage+i] == 'x' || fen[j+decalage+i] == 'o'){
+                    somme_carac++;
+                }
+                else {
+                    somme_carac += fen[j+decalage+i] -48;
+                }
+                position.morpion[i].pos[j] = fen[j+decalage+i];
+                comptage = j;
+                if(somme_carac == 9) break;
+            }
+            position.morpion[i].pos[comptage+1] = '\0';
+            decalage += comptage;
+        }
+    }
+    strcpy(position.morpion[9].pos, toPosGraph(temp_BigMorpion));
+    free(temp_BigMorpion);
+    return position;
 }
 
 

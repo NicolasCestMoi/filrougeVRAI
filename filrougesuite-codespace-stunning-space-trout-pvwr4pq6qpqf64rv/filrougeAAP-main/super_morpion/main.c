@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <limits.h>
 
 #include "../morpion_simple/posGraph.h"
 #include "../morpion_simple/morpion.h"
@@ -10,21 +13,45 @@
 #include "morpion_to_S.h"
 #include "gestionGraphUltimate.h"
 
-int main(){
+int DEBUG = 0;
+int profondeur = 1;
+
+int main(int argc, char* argv[]){
     posGraphUltimate position;
-    position.joueur = 'o'; // Il faut initialisé le joueur qui commence (à automatiser)
-    position.morpion[0] = newPosition("xo7",'o');
-    position.morpion[1] = newPosition("2ox5",'o');
-    position.morpion[2] = newPosition("o7o",'o');
-    position.morpion[3] = newPosition("xo3o3",'o');
-    position.morpion[4] = newPosition("xx5o1",'o');
-    position.morpion[5] = newPosition("4x4",'o');
-    position.morpion[6] = newPosition("oxx6",'o');
-    position.morpion[7] = newPosition("o5o2",'o');
-    position.morpion[8] = newPosition("8x",'o');
+    if(argc ==1){
+        position = fenToPosGraphUltimate("999999999");         //Exemple de buffer : "6xoxOOOX2xo1ox1oXx2xo4oox4ox"
+        position.joueur = 'o';
+        DEBUG = 0;
+        profondeur = 1;
+        printf("Si vous voulez lancer une position précise OU lancer un mode, format : \n");
+        printf("[programme] [position FEN (position   joueur)] [profondeur] [mode DEBUG? DEBUG / noDEBUG] [mode SMPATH? SMPATH/ noSMPATH] \n");
+    }
+    else if(argc >= 2){
+        DEBUG = 0;
+        char buffer[100];
+        int count = 0;
+        while(argv[1][count] != ' '){
+            buffer[count] = argv[1][count];
+            count++;
+        }
+        buffer[++count] = '\0';
+        position = fenToPosGraphUltimate(buffer);         //Exemple de buffer : "6xoxOOOX2xo1ox1oXx2xo4oox4ox"
+        position.joueur = argv[1][count];
+        if(argc>=3){
+            profondeur = atoi(argv[2]);
+            if(argc >= 4){                                          //6xox2xo4xO7xoX2xo1ox1oXx3o4oox4ox
+                if(strcmp(argv[3],"DEBUG") == 0) DEBUG = 1;
+                else if(strcmp(argv[3],"DEBUG") != 0) DEBUG =0;
+                if(argc >= 5 && strcmp(argv[4],"SMPATH") ==0){
+                    printf("\nRépertoire de création du .dot : ../super_morpion/ \n\n");
+                }
+            }
+        }
+    }
 
-
-    position.morpion[9] = newPosition("9",'o');
+    for(int i = 0; i<10;i++){
+        position.morpion[i] = newPosition(position.morpion[i].pos,'o');
+    }
     
     GameUltimate(position);
 
